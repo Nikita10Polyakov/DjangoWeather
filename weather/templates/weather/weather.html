@@ -1,0 +1,93 @@
+{% extends "weather/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center">Поточна погода</h1>
+
+    <!-- Вибір міста -->
+    <div class="mb-3">
+        <label for="city-select" class="form-label">Оберіть місто:</label>
+        <select id="city-select" class="form-select">
+            <option value="Madrid">Madrid</option>
+            <option value="London">London</option>
+            <option value="New York">New York</option>
+            <option value="Tokyo">Tokyo</option>
+            <option value="Berlin">Berlin</option>
+        </select>
+    </div>
+
+    <!-- Відображення погоди -->
+    <div id="weather-info" class="card p-4">
+        <h2 id="city-name"></h2>
+        <p><strong>Температура:</strong> <span id="temperature"></span>°C</p>
+        <p><strong>Вологість:</strong> <span id="humidity"></span>%</p>
+        <p><strong>Опис:</strong> <span id="description"></span></p>
+        <p><strong>Останнє оновлення:</strong> <span id="timestamp"></span></p>
+    </div>
+
+    <!-- Кнопка оновлення -->
+    <button id="update-button" class="btn btn-primary mt-3">Оновити</button>
+
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const citySelect = document.getElementById("city-select");
+    const updateButton = document.getElementById("update-button");
+
+    function fetchWeather(city) {
+        fetch(`/api/weather/${city}/`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("city-name").innerText = data.city;
+                document.getElementById("temperature").innerText = data.temperature;
+                document.getElementById("humidity").innerText = data.humidity;
+                document.getElementById("description").innerText = data.weather_description;
+                document.getElementById("timestamp").innerText = new Date(data.timestamp).toLocaleString();
+
+                // Оновлення графіка
+                updateChart(city);
+            })
+            .catch(error => console.error("Error fetching weather data:", error));
+    }
+
+    function updateChart(city) {
+        fetch(`/api/weather/${city}/`)
+            .then(response => response.json())
+            .then(data => {
+                const ctx = document.getElementById("weatherChart").getContext("2d");
+
+                if (window.myChart) {
+                    window.myChart.destroy();
+                }
+
+                window.myChart = new Chart(ctx, {
+                    type: "line",
+                    data: {
+                        labels: data.history.map(entry => new Date(entry.timestamp).toLocaleTimeString()),
+                        datasets: [{
+                            label: "Температура (°C)",
+                            data: data.history.map(entry => entry.temperature),
+                            borderColor: "blue",
+                            fill: false
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            });
+    }
+
+    // Обробник зміни міста
+    citySelect.addEventListener("change", () => fetchWeather(citySelect.value));
+    updateButton.addEventListener("click", () => fetchWeather(citySelect.value));
+
+    // Завантаження погоди для першого міста
+    fetchWeather(citySelect.value);
+});
+</script>
+{% endblock %}
