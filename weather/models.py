@@ -3,7 +3,7 @@ from django.utils import timezone
 
 
 class WeatherData(models.Model):
-    city = models.CharField(max_length=255, unique=True)  # Унікальне поле для запобігання дублікатів
+    city = models.CharField(max_length=255, unique=True) 
     temperature = models.FloatField()
     humidity = models.IntegerField()
     weather_description = models.CharField(max_length=255)
