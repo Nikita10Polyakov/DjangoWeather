@@ -20,7 +20,7 @@ RESTful API to access weather data
 
 Dashboard with real-time weather conditions and visualizations
 
-### Technical Stack 🛠
+### Technical Stack 
 
 Backend: Django, Django REST Framework
 
