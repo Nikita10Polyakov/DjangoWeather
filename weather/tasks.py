@@ -8,11 +8,9 @@ CITIES = ["London", "New York", "Tokyo", "Paris", "Berlin", "Madrid"]
 
 @shared_task
 def update_weather():
-    """Оновлення погоди для всіх міст"""
     for city in CITIES:
         data = fetch_weather(city)
         if data:
-            # Оновлюємо існуючий запис або створюємо новий
             WeatherData.objects.update_or_create(
                 city=data["city"],
                 defaults={
