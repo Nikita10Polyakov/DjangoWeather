@@ -4,7 +4,6 @@
 <div class="container mt-5">
     <h1 class="text-center">Поточна погода</h1>
 
-    <!-- Вибір міста -->
     <div class="mb-3">
         <label for="city-select" class="form-label">Оберіть місто:</label>
         <select id="city-select" class="form-select">
@@ -16,7 +15,6 @@
         </select>
     </div>
 
-    <!-- Відображення погоди -->
     <div id="weather-info" class="card p-4">
         <h2 id="city-name"></h2>
         <p><strong>Температура:</strong> <span id="temperature"></span>°C</p>
@@ -25,7 +23,6 @@
         <p><strong>Останнє оновлення:</strong> <span id="timestamp"></span></p>
     </div>
 
-    <!-- Кнопка оновлення -->
     <button id="update-button" class="btn btn-primary mt-3">Оновити</button>
 
 </div>
@@ -47,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 document.getElementById("description").innerText = data.weather_description;
                 document.getElementById("timestamp").innerText = new Date(data.timestamp).toLocaleString();
 
-                // Оновлення графіка
+
                 updateChart(city);
             })
             .catch(error => console.error("Error fetching weather data:", error));
@@ -82,11 +79,11 @@ document.addEventListener("DOMContentLoaded", function() {
             });
     }
 
-    // Обробник зміни міста
+
     citySelect.addEventListener("change", () => fetchWeather(citySelect.value));
     updateButton.addEventListener("click", () => fetchWeather(citySelect.value));
 
-    // Завантаження погоди для першого міста
+
     fetchWeather(citySelect.value);
 });
 </script>
