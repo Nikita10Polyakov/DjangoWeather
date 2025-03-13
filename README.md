@@ -80,4 +80,41 @@ celery -A weather_dashboard beat --loglevel=info
 
 python manage.py runserver
 
-Now, open your browser and go to http://127.0.0.1:8000/weather/ 🌍
+Now, open your browser and go to http://127.0.0.1:8000/weather/ 
+
+# API Documentation 
+
+The application provides a RESTful API to access weather data:
+
+## Get all weather data
+
+GET /api/weather/
+
+#### Response:
+
+[
+  {"city": "London", "temperature": 10.5, "humidity": 80, "weather_description": "Cloudy"},
+  {"city": "Paris", "temperature": 12.3, "humidity": 75, "weather_description": "Sunny"}
+]
+
+## Get weather data for a specific city
+
+GET /api/weather/{city}/
+
+#### Example:
+
+GET /api/weather/London/
+
+#### Response:
+
+{"city": "London", "temperature": 10.5, "humidity": 80, "weather_description": "Cloudy"}
+
+## Manually trigger weather update
+
+POST /api/update/
+
+#### Response:
+
+{"message": "Weather update initiated."}
+
+## Developed by Mykyta Poliakov
