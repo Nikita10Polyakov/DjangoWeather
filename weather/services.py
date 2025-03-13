@@ -3,12 +3,12 @@ import requests
 from django.utils import timezone
 from weather.models import WeatherData
 
-# Використовуємо API-ключ із settings.py
+
 API_KEY = settings.OPENWEATHER_API_KEY
 BASE_URL = "http://api.openweathermap.org/data/2.5/weather"
 
 def fetch_weather(city):
-    """Отримує актуальні дані про погоду для заданого міста."""
+
     params = {
         "q": city,
         "appid": API_KEY,
@@ -32,10 +32,10 @@ def fetch_weather(city):
             "timestamp": timezone.now(),
         }
 
-        # Використовуємо update_or_create(), щоб уникнути дублювання
+
         WeatherData.objects.update_or_create(
-            city=weather_data["city"],  # Поле для перевірки унікальності
-            defaults=weather_data  # Дані для оновлення
+            city=weather_data["city"],  
+            defaults=weather_data 
         )
 
         return weather_data
